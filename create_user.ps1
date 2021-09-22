@@ -7,6 +7,7 @@ write-host $newusers
 foreach ($user in $newusers) {
     $PasswordProfile=New-Object -TypeName Microsoft.Open.AzureAD.Model.PasswordProfile
     $PasswordProfile.Password=$user.Password
+    $PasswordProfile.ForceChangePasswordNextLogin = $true 
     $MFAProfile=New-Object -TypeName Microsoft.Online.Administration.StrongAuthenticationRequirement
     $MFAProfile.IsDefault = $true
     $MFAProfile.MethodType="PhoneAppNotification" 
@@ -20,7 +21,7 @@ foreach ($user in $newusers) {
         -Mobile $user.Mobile `
         -Department $user.Department `
         -jobTitle $user.JobTitle `
-        -PasswordProfile $PasswordProfile.ForceChangePasswordNextLogin `
+        -PasswordProfile $PasswordProfile `
         -MFAProfile $MFAProfile `
         -AccountEnabled $true
 }
